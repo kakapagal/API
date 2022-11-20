@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+ <title>Api Class || KakaPagal</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+  </head>
+  <style>
+label
+{
+  font-weight:bolder
+}
+  </style>
+}
+<body ng-app="myApp" ng-controller="myCtrl">
+
+<div class="container">
+<p class="m-4">Version 1.2</p>
+  <div class="row card m-4">
+    <div class="col-md-6 p-2">
+      <label>Request Class Name</label>
+      <div class="form-group">
+        <input type="text"  class="form-control" placeholder="Request Classs Name" ng-model="classname">
+      </div>
+    </div>
+
+      <div class="col-md-6 p-2">
+      <label>Project Namespace Name</label>
+      <div class="form-group">
+       <input type="text"  class="form-control" placeholder="Project namespace Name" ng-model="namespace">
+      </div>
+    </div>
+
+      <div class="col-md-6 p-2">
+      <label>Project Model Folder Name</label>
+      <div class="form-group">
+     <input type="text" class="form-control"  placeholder="Project Model Folder Name" ng-model="foldername">
+      </div>
+    </div>
+
+      <div class="col-md-6 p-2">
+      <label>Project Model Entities Name</label>
+      <div class="form-group">
+    <input type="text" class="form-control" placeholder="Project Model Entities   Name" ng-model="entitiesname">
+      </div>
+    </div>
+
+  </div>
+<div class="row card m-2">
+    <div class="form-group" style="font-weight:bolder;">
+        Parameters For Request <input type="checkbox"  ng-model="Q.Request" >
+    </div>
+<div class="row" ng-show="Q.Request==true">
+   <div class="col-md-3 p-2">
+    <label>Parameters Name</label>
+      <div class="form-group">
+   <input type="text" class="form-control"  placeholder="Parameter Name" ng-model="req.Name">
+      </div>
+    </div>
+
+    <div class="col-md-3 p-2">
+      <label>Parameters Type</label>
+      <div class="form-group">
+      <input type="text" class="form-control"   placeholder="Parameter Type" ng-model="req.Type">   
+    </div>
+   </div>
+      <div class="col-md-3 ">
+         <button class="btn  btn-primary" style="margin-top: 31px;" ng-click="addRequestItem(req)">Add</button>
+     </div>
+      </div>
+   
+</div>
+<div class="row card m-2" >
+  <div class="form-group" style="font-weight:bolder;">
+      Parameters For Response <input type="checkbox" ng-model="Q.Response" >
+   </div>
+<div class="row" ng-show="Q.Response==true">
+   <div class="col-md-3 p-2">
+    <label>Parameters Name</label>
+      <div class="form-group">
+   <input type="text" class="form-control"  placeholder="Parameter Name" ng-model="res.Name">
+      </div>
+    </div>
+
+
+    <div class="col-md-3 p-2">
+        <label>Parameters Type</label>
+      <div class="form-group" >
+      <input type="text" class="form-control"   placeholder="Parameter Type" ng-model="res.Type">   
+    </div>
+   </div>
+      <div class="col-md-3">
+         <button class="btn  btn-primary" style="margin-top: 31px;" ng-click="addResponseItem(res)">Add</button>
+     </div>
+      </div>
+</div>
+
+
+<br>
+<!--Start Class Code-->
+<div class="row card m-2">
+
+    <div class="col-md-12">
+using DE.Infrastructure.Concept;<br>
+using {{namespace}}.Model.EntityModel;<br>
+using System;<br>
+using System.Collections.Generic;<br>
+using System.Linq;<br>
+using FluentValidation;<br>
+
+namespace {{namespace}}.Model.Features.{{foldername}}<br>
+{<br>
+    public class {{classname}}Request : IRequest<{{classname}}Response><br>
+    {<br>
+    
+      <span ng-repeat="item in Request" ng-show="Q.Request==true">
+         public {{item.Type}}  {{item.Name}} {get;set;} <br>
+      </span>
+
+    }<br>
+
+    public class {{classname}}Response : Response<br>
+    {<br>
+        <span ng-repeat="item in ResponseData" ng-show="Q.Response==true">
+         public {{item.Type}}  {{item.Name}} {get;set;} <br>
+      </span>
+    }<br>
+
+
+    public class {{classname}}RequestValidator : AbstractValidator<{{classname}}Request><br>
+    {<br>
+        private {{entitiesname}} _dbcontext;<br>
+        public {{classname}}RequestValidator({{entitiesname}} _context)<br>
+        {<br>
+            _dbcontext = _context;<br>
+
+           // RuleFor(x => x.RefNo).NotEmpty().WithMessage("Enter Reference No!");<br>
+          
+        }<br>
+      
+    }<br>
+
+      public class {{classname}}RequestHandler : IRequestHandler<{{classname}}Request, {{classname}}Response><br>
+    {<br>
+        private {{entitiesname}} _dbcontext;<br>
+      
+        public {{classname}}RequestHandler({{entitiesname}} _context)<br>
+        {<br>
+            _dbcontext = _context;<br>
+           
+        }<br>
+        public {{classname}}Response Execute({{classname}}Request request)<br>
+        {<br>
+          {{classname}}Response response = new {{classname}}Response();<br>
+           
+            return response;<br>
+        }<br>
+
+    }<br>
+}<br>
+
+    
+
+
+
+    
+  
+  </div>
+</div>
+<!--End Classs Code-->
+
+<!--Controller Code-->
+<div class="row card m-2">
+<div class="col-md-3">
+<div class="form-group" style="font-weight:bolder;">
+      Post Method <input type="checkbox" ng-model="Q.Post" >
+   </div>
+   <div class="form-group" style="font-weight:bolder;">
+      Get Method <input type="checkbox" ng-model="Q.Get" >
+   </div>
+</div>
+<div class="col-md-12" ng-show="Q.Get==true">
+<hr>
+   [HttpGet]<br>
+        public object {{classname}}([FromUri] {{classname}}Request req)<br>
+        {</br>
+            var resp = _requestExecutor.Execute(req);<br>
+            return resp;</br>
+        }<br>
+		<br>
+		   $scope.ajaxGet('api/DigiSecurityApi/{{classname}}', null, function (resp) {	<br>
+
+                            console.log("{{classname}}", resp);	<br>
+                           if (resp.Success) {	<br>
+                              
+                              $scope.{{classname}}=resp;<br>
+                           }<br>
+                        });<br>
+		
+</div>
+<div class="col-md-12" ng-show="Q.Post==true">
+<hr>
+   [HttpPost]<br>
+       public object {{classname}}({{classname}}Request req)<br>
+        {</br>
+            var resp = _requestExecutor.Execute(req);<br>
+            return resp;</br>
+        }<br>
+		<br>
+		   $scope.ajaxPost('api/DigiSecurityApi/{{classname}}', null, function (resp) {	<br>
+
+                            console.log("{{classname}}", resp);	<br>
+                           if (resp.Success) {	<br>
+                              
+                             <br>
+                           }<br>
+                        });<br>
+</div>
+
+</div>
+</div>
+
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+
+<script type="text/javascript">
+var app = angular.module('myApp', []);
+app.controller('myCtrl', function($scope, $interval) {
+
+  $scope.Request = [];
+    $scope.addRequestItem = function (data) {
+      console.log(data);
+      $scope.Para=[];
+     if(data.Name!=null && data.Type!=null)
+	 {
+	  $scope.Para.Name=data.Name;
+      $scope.Para.Type=data.Type;
+      data.Type=null;
+	  data.Name=null;
+	  $scope.Request.push($scope.Para);
+	 }
+        
+    }
+	
+	  $scope.ResponseData = [];
+
+    $scope.addResponseItem = function (data) {
+      console.log(data);
+      $scope.Para2=[];
+     if(data.Name!=null && data.Type!=null)
+	 {
+	  $scope.Para2.Name=data.Name;
+      $scope.Para2.Type=data.Type;
+      data.Type=null;
+	  data.Name=null;
+	  $scope.ResponseData.push($scope.Para2);
+	 }
+        
+    }
+ 
+});
+</script>
+
+
+</html>
